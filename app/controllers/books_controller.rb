@@ -18,15 +18,14 @@ class BooksController < ApplicationController
     #Create a new book
     def create
         @@data.push(params[:book])
-        # render plain: @@data[@@data.length - 1]
         render json: @@data
     end
 
     #Update a book
     def update
-        @@data[params[:id].to_i] = {title: params[:title], author: params[:author]}
-        # render json: @@data[params[:id].to_i]
-        render plain: params
+        puts book_params
+        @@data[params[:id].to_i].merge!(book_params)
+        render json: @@data
     end
 
     #Remove a book
@@ -41,5 +40,9 @@ class BooksController < ApplicationController
             { title: "Harry Potter", author: "J.K Rowling" },
             { title: "Name of the wind", author: "Patrick Rothfuss" }
         ]
+    end
+
+    def book_params
+        params.require(:book).permit(:title, :author)
     end
 end
